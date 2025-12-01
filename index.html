@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FF MAX Toolkit - Premium Gaming Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #ff4757;
+            --secondary: #3742fa;
+            --dark: #1e272e;
+            --darker: #0f1419;
+            --light: #f1f2f6;
+            --success: #2ed573;
+            --warning: #ffa502;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--darker), var(--dark));
+            color: var(--light);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* RGB Animations */
+        @keyframes rgbGlow {
+            0% { 
+                box-shadow: 0 0 20px #ff4757, 
+                           0 0 40px #ff475744, 
+                           0 0 60px #ff475722; 
+            }
+            16% { 
+                box-shadow: 0 0 20px #ff6b81, 
+                           0 0 40px #ff6b8144, 
+                           0 0 60px #ff6b8122; 
+            }
+            33% { 
+                box-shadow: 0 0 20px #3742fa, 
+                           0 0 40px #3742fa44, 
+                           0 0 60px #3742fa22; 
+            }
+            50% { 
+                box-shadow: 0 0 20px #5352ed, 
+                           0 0 40px #5352ed44, 
+                           0 0 60px #5352ed22; 
+            }
+            66% { 
+                box-shadow: 0 0 20px #2ed573, 
+                           0 0 40px #2ed57344, 
+                           0 0 60px #2ed57322; 
+            }
+            83% { 
+                box-shadow: 0 0 20px #ffa502, 
+                           0 0 40px #ffa50244, 
+                           0 0 60px #ffa50222; 
+            }
+            100% { 
+                box-shadow: 0 0 20px #ff4757, 
+                           0 0 40px #ff475744, 
+                           0 0 60px #ff475722; 
+            }
+        }
+
+        @keyframes rgbBorder {
+            0% { border-color: #ff4757; }
+            16% { border-color: #ff6b81; }
+            33% { border-color: #3742fa; }
+            50% { border-color: #5352ed; }
+            66% { border-color: #2ed573; }
+            83% { border-color: #ffa502; }
+            100% { border-color: #ff4757; }
+        }
+
+        @keyframes rgbText {
+            0% { 
+                background: linear-gradient(90deg, #ff4757, #ff6b81, #3742fa);
+                -webkit-background-clip: text;
+                text-shadow: 0 0 20px #ff4757;
+            }
+            33% { 
+                background: linear-gradient(90deg, #3742fa, #5352ed, #2ed573);
+                -webkit-background-clip: text;
+                text-shadow: 0 0 20px #3742fa;
+            }
+            66% { 
+                background: linear-gradient(90deg, #2ed573, #ffa502, #ff4757);
+                -webkit-background-clip: text;
+                text-shadow: 0 0 20px #2ed573;
+            }
+            100% { 
+                background: linear-gradient(90deg, #ff4757, #ff6b81, #3742fa);
+                -webkit-background-clip: text;
+                text-shadow: 0 0 20px #ff4757;
+            }
+        }
+
+        @keyframes rgbBackground {
+            0% { background: linear-gradient(135deg, #ff4757, #3742fa); }
+            25% { background: linear-gradient(135deg, #3742fa, #2ed573); }
+            50% { background: linear-gradient(135deg, #2ed573, #ffa502); }
+            75% { background: linear-gradient(135deg, #ffa502, #ff4757); }
+            100% { background: linear-gradient(135deg, #ff4757, #3742fa); }
+        }
+
+        /* Voice Controls */
+        .voice-controls {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+        }
+
+        .voice-btn {
+            background: rgba(255, 71, 87, 0.2);
+            border: 1px solid rgba(255, 71, 87, 0.5);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            animation: rgbBorder 4s linear infinite, rgbGlow 4s linear infinite;
+        }
+
+        .voice-btn:hover {
+            background: rgba(255, 71, 87, 0.4);
+            transform: scale(1.05);
+        }
+
+        .voice-btn.active {
+            background: rgba(46, 213, 115, 0.4);
+            border-color: #2ed573;
+        }
+
+        /* Login Container */
+        .login-container {
+            background: rgba(30, 39, 46, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            margin: 50px auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            border: 2px solid transparent;
+            position: relative;
+            backdrop-filter: blur(10px);
+            animation: rgbBorder 4s linear infinite, rgbGlow 4s linear infinite;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-logo {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            animation: rgbText 4s ease-in-out infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .login-subtitle {
+            color: #aaa;
+            font-size: 1rem;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #ddd;
+            font-size: 0.9rem;
+            text-shadow: 0 0 5px rgba(255,255,255,0.2);
+        }
+
+        .form-input {
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 14px 18px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            animation: rgbBorder 6s linear infinite;
+        }
+
+        .form-input:focus {
+            outline: none;
+            animation: rgbGlow 2s ease-in-out infinite;
+            transform: scale(1.02);
+        }
+
+        .login-btn {
+            background: linear-gradient(90deg, #ff4757, #3742fa);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            animation: rgbBackground 4s ease-in-out infinite, rgbGlow 4s ease-in-out infinite;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            animation: rgbGlow 1s ease-in-out infinite;
+        }
+
+        .error-message {
+            background: rgba(255, 71, 87, 0.1);
+            border: 1px solid rgba(255, 71, 87, 0.3);
+            color: #ff4757;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.9rem;
+            display: none;
+            animation: rgbGlow 2s ease-in-out infinite;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: none;
+            width: 100%;
+        }
+
+        .premium-banner {
+            background: linear-gradient(90deg, #ff9f43, #feca57, #ff9ff3);
+            color: #000;
+            text-align: center;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            animation: rgbGlow 3s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .premium-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: bannerShine 3s ease-in-out infinite;
+        }
+
+        @keyframes bannerShine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 0;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 35px;
+            flex-wrap: wrap;
+            gap: 20px;
+            animation: rgbBorder 6s ease-in-out infinite;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-text {
+            font-size: 28px;
+            font-weight: 800;
+            animation: rgbText 5s ease-in-out infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: rgbBorder 4s ease-in-out infinite, rgbGlow 4s ease-in-out infinite;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #ff4757, #3742fa);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            animation: rgbBackground 3s ease-in-out infinite, rgbGlow 3s ease-in-out infinite;
+        }
+
+        .logout-btn {
+            background: rgba(255, 71, 87, 0.2);
+            color: #ff4757;
+            border: 1px solid rgba(255, 71, 87, 0.3);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: rgbBorder 4s ease-in-out infinite;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 71, 87, 0.3);
+            animation: rgbGlow 1s ease-in-out infinite;
+        }
+
+        .status-bar {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin: 35px 0;
+            flex-wrap: wrap;
+        }
+
+        .status-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: rgbBorder 5s linear infinite, rgbGlow 5s linear infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .status-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: statusShine 3s ease-in-out infinite;
+        }
+
+        @keyframes statusShine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 35px;
+            margin-bottom: 50px;
+        }
+
+        .features-section {
+            background: rgba(30, 39, 46, 0.95);
+            border-radius: 20px;
+            padding: 35px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            animation: rgbBorder 6s ease-in-out infinite, rgbGlow 6s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 30px;
+            animation: rgbText 4s ease-in-out infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 35px;
+        }
+
+        .feature-card {
+            background: linear-gradient(145deg, rgba(0,0,0,0.4), rgba(255,255,255,0.05));
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            animation: rgbBorder 8s linear infinite, rgbGlow 8s linear infinite;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            animation: rgbBackground 4s linear infinite;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            animation: rgbGlow 2s ease-in-out infinite;
+        }
+
+        .feature-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .feature-icon {
+            width: 55px;
+            height: 55px;
+            background: rgba(255, 71, 87, 0.15);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 18px;
+            font-size: 24px;
+            animation: rgbBorder 5s ease-in-out infinite, rgbGlow 5s ease-in-out infinite;
+        }
+
+        .feature-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            animation: rgbText 4s ease-in-out infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .feature-desc {
+            color: #bbb;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            font-size: 0.95rem;
+            text-shadow: 0 0 5px rgba(255,255,255,0.1);
+        }
+
+        .feature-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .key-binding {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-family: 'Courier New', monospace;
+            animation: rgbBorder 3s ease-in-out infinite;
+        }
+
+        .toggle {
+            position: relative;
+            display: inline-block;
+            width: 55px;
+            height: 28px;
+        }
+
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #666, #888);
+            transition: .4s;
+            border-radius: 34px;
+            animation: rgbBorder 6s linear infinite;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 4px;
+            bottom: 3px;
+            background: white;
+            transition: .4s;
+            border-radius: 50%;
+            animation: rgbGlow 4s ease-in-out infinite;
+        }
+
+        input:checked + .slider {
+            animation: rgbBackground 4s ease-in-out infinite, rgbGlow 4s ease-in-out infinite;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .uid-section {
+            background: rgba(30, 39, 46, 0.95);
+            border-radius: 20px;
+            padding: 35px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            animation: rgbBorder 6s ease-in-out infinite, rgbGlow 6s ease-in-out infinite;
+        }
+
+        .uid-form {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .btn {
+            background: linear-gradient(90deg, #ff4757, #3742fa);
+            color: white;
+            border: none;
+            padding: 16px 25px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+            animation: rgbBackground 4s ease-in-out infinite, rgbGlow 4s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            transform: translateY(-4px) scale(1.05);
+            animation: rgbGlow 1s ease-in-out infinite;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: btnShine 2s ease-in-out infinite;
+        }
+
+        @keyframes btnShine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .btn-activate {
+            animation: rgbBackground 3s ease-in-out infinite, rgbGlow 3s ease-in-out infinite;
+        }
+
+        .player-info {
+            background: linear-gradient(145deg, rgba(0,0,0,0.4), rgba(255,255,255,0.05));
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: rgbBorder 5s ease-in-out infinite, rgbGlow 5s ease-in-out infinite;
+        }
+
+        .info-title {
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #ddd;
+            text-align: center;
+            font-size: 1.2rem;
+            animation: rgbText 4s ease-in-out infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .info-label {
+            font-size: 0.85rem;
+            color: #aaa;
+            font-weight: 600;
+            text-shadow: 0 0 5px rgba(255,255,255,0.1);
+        }
+
+        .info-value {
+            font-weight: 700;
+            color: var(--success);
+            font-size: 1.1rem;
+            animation: rgbText 3s ease-in-out infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 18px;
+            margin-top: 25px;
+        }
+
+        .notification {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            background: rgba(30, 39, 46, 0.98);
+            color: white;
+            padding: 18px 25px;
+            border-radius: 12px;
+            border-left: 5px solid var(--success);
+            z-index: 10000;
+            font-weight: 600;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+            transition: all 0.4s ease;
+            transform: translateX(400px);
+            max-width: 400px;
+            animation: rgbGlow 3s ease-in-out infinite;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.error {
+            border-left-color: var(--primary);
+        }
+
+        .fake-loader {
+            height: 5px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            border-radius: 3px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .fake-loader::after {
+            content: '';
+            position: absolute;
+            height: 100%;
+            width: 40%;
+            background: linear-gradient(90deg, #ff4757, #3742fa, #2ed573);
+            animation: loading 1.8s ease-in-out infinite, rgbBackground 3s ease-in-out infinite;
+            border-radius: 3px;
+        }
+
+        @keyframes loading {
+            0% { left: -40%; }
+            100% { left: 100%; }
+        }
+
+        .uid-hint {
+            font-size: 0.85rem;
+            color: #aaa;
+            margin-top: 8px;
+            text-shadow: 0 0 5px rgba(255,255,255,0.1);
+        }
+
+        .uid-valid {
+            color: var(--success);
+            animation: rgbText 2s ease-in-out infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .uid-invalid {
+            color: var(--primary);
+            animation: rgbText 2s ease-in-out infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .premium-features {
+            background: linear-gradient(135deg, rgba(255, 159, 67, 0.15), rgba(254, 202, 87, 0.1));
+            border: 1px solid rgba(255, 159, 67, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 35px;
+            animation: rgbBorder 4s ease-in-out infinite, rgbGlow 4s ease-in-out infinite;
+        }
+
+        .premium-title {
+            font-weight: 800;
+            margin-bottom: 20px;
+            color: #feca57;
+            text-align: center;
+            font-size: 1.3rem;
+            animation: rgbText 3s ease-in-out infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .premium-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .premium-list li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.95rem;
+            color: #ff9f43;
+            font-weight: 600;
+            animation: rgbText 5s ease-in-out infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            border-top: 2px solid rgba(255, 255, 255, 0.1);
+            margin-top: 60px;
+            color: #888;
+            font-size: 0.95rem;
+            animation: rgbBorder 6s ease-in-out infinite;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .premium-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .login-container {
+                padding: 30px 20px;
+                margin: 20px auto;
+            }
+            
+            .voice-controls {
+                top: 10px;
+                left: 10px;
+            }
+            
+            .status-bar {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+            
+            header {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .login-logo {
+                font-size: 2rem;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Voice Controls -->
+        <div class="voice-controls">
+            <button class="voice-btn" id="voiceToggle">🔊 Voice: ON</button>
+            <button class="voice-btn" id="testVoice">🎤 Test Voice</button>
+        </div>
+
+        <!-- Login Section -->
+        <div class="login-container" id="loginContainer">
+            <div class="login-header">
+                <div class="login-logo">FFMAX TOOLKIT PRO</div>
+                <div class="login-subtitle">Premium Gaming Assistant - Secure Login Required</div>
+            </div>
+            
+            <form class="login-form" id="loginForm">
+                <div class="form-group">
+                    <label class="form-label" for="username">USERNAME</label>
+                    <input type="text" id="username" class="form-input" placeholder="Enter your username" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="password">PASSWORD</label>
+                    <input type="password" id="password" class="form-input" placeholder="Enter your password" required>
+                </div>
+                
+                <div class="error-message" id="errorMessage">
+                    ❌ Invalid username or password. Please try again.
+                </div>
+                
+                <button type="submit" class="login-btn">
+                    🔐 LOGIN TO DASHBOARD
+                </button>
+            </form>
+            
+            <div class="login-footer">
+                <p>Default Credentials: admin / password123</p>
+                <p style="margin-top: 10px; font-size: 0.8rem; color: #666;">Also try: user / freefire2023</p>
+            </div>
+        </div>
+
+        <!-- Main Dashboard -->
+        <div class="dashboard" id="dashboard">
+            <div class="premium-banner">
+                🚀 PREMIUM FEATURES ACTIVATED | 🛡️ UNDETECTED TECHNOLOGY | ⚡ MAXIMUM PERFORMANCE
+            </div>
+
+            <header>
+                <div class="logo">
+                    <div class="logo-text">FFMAX TOOLKIT PRO</div>
+                </div>
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">A</div>
+                    <div>
+                        <div>Welcome, <span id="userDisplayName">Admin</span></div>
+                        <div style="font-size: 0.8rem; color: #aaa;">Premium User</div>
+                    </div>
+                    <button class="logout-btn" id="logoutBtn">Logout</button>
+                </div>
+            </header>
+
+            <div class="status-bar">
+                <div class="status-item">
+                    🔴 Status: <span style="color: #2ed573; font-weight: 700;">ONLINE</span>
+                </div>
+                <div class="status-item">
+                    🛡️ Security: <span style="color: #2ed573; font-weight: 700;">UNDETECTED</span>
+                </div>
+                <div class="status-item">
+                    👥 Active Users: <span style="color: #ffa502; font-weight: 700;">12,847</span>
+                </div>
+            </div>
+
+            <div class="main-content">
+                <div class="features-section">
+                    <h2 class="section-title">PREMIUM GAMING FEATURES</h2>
+                    
+                    <div class="features-grid">
+                        <div class="feature-card" data-voice="Smart Aimbot">
+                            <div class="feature-header">
+                                <div class="feature-icon">🎯</div>
+                                <div class="feature-title">Smart Aimbot</div>
+                            </div>
+                            <div class="feature-desc">
+                                Advanced targeting system with customizable FOV and bone prioritization for precise aiming.
+                            </div>
+                            <div class="feature-controls">
+                                <div class="key-binding">F4</div>
+                                <label class="toggle">
+                                    <input type="checkbox" id="aimbotToggle">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="feature-card" data-voice="Sniper Aimbot">
+                            <div class="feature-header">
+                                <div class="feature-icon">🎯</div>
+                                <div class="feature-title">Sniper Aimbot</div>
+                            </div>
+                            <div class="feature-desc">
+                                Specialized aim assistance for sniper rifles with zero bullet drop and target leading.
+                            </div>
+                            <div class="feature-controls">
+                                <div class="key-binding">F5</div>
+                                <label class="toggle">
+                                    <input type="checkbox" id="sniperToggle">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="feature-card" data-voice="Wallhack ESP">
+                            <div class="feature-header">
+                                <div class="feature-icon">👁️</div>
+                                <div class="feature-title">Wallhack ESP</div>
+                            </div>
+                            <div class="feature-desc">
+                                Visual enhancement showing enemy positions, health bars, and loot through walls.
+                            </div>
+                            <div class="feature-controls">
+                                <div class="key-binding">F6</div>
+                                <label class="toggle">
+                                    <input type="checkbox" id="espToggle" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="feature-card" data-voice="Triggerbot">
+                            <div class="feature-header">
+                                <div class="feature-icon">🖱️</div>
+                                <div class="feature-title">Triggerbot</div>
+                            </div>
+                            <div class="feature-desc">
+                                Automatic shooting when crosshair is on target with adjustable delay settings.
+                            </div>
+                            <div class="feature-controls">
+                                <div class="key-binding">F7</div>
+                                <label class="toggle">
+                                    <input type="checkbox" id="triggerToggle">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="feature-card" data-voice="No Recoil">
+                            <div class="feature-header">
+                                <div class="feature-icon">↔️</div>
+                                <div class="feature-title">No Recoil</div>
+                            </div>
+                            <div class="feature-desc">
+                                Complete weapon recoil control with per-weapon customization for perfect accuracy.
+                            </div>
+                            <div class="feature-controls">
+                                <div class="key-binding">F8</div>
+                                <label class="toggle">
+                                    <input type="checkbox" id="recoilToggle" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="feature-card" data-voice="Speed Hack">
+                            <div class="feature-header">
+                                <div class="feature-icon">📊</div>
+                                <div class="feature-title">Speed Hack</div>
+                            </div>
+                            <div class="feature-desc">
+                                Increase movement speed for strategic positioning with adjustable speed multiplier.
+                            </div>
+                            <div class="feature-controls">
+                                <div class="key-binding">F9</div>
+                                <label class="toggle">
+                                    <input type="checkbox" id="speedToggle">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn" id="applySettings">
+                            ⚙️ APPLY ALL SETTINGS
+                        </button>
+                        <button class="btn" id="downloadBtn">
+                            🚀 DOWNLOAD PANEL PRO
+                        </button>
+                    </div>
+                    <div class="fake-loader" id="fakeLoader"></div>
+
+                    <div class="premium-features">
+                        <div class="premium-title">🎯 PREMIUM FEATURES UNLOCKED</div>
+                        <ul class="premium-list">
+                            <li>✅ Advanced Anti-Detection</li>
+                            <li>✅ Auto-Update System</li>
+                            <li>✅ Priority Support</li>
+                            <li>✅ Exclusive Features</li>
+                            <li>✅ Custom Configs</li>
+                            <li>✅ 24/7 Online</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="uid-section">
+                    <h2 class="section-title">PLAYER CONFIGURATION</h2>
+                    
+                    <div class="uid-form">
+                        <div class="form-group">
+                            <label class="form-label" for="playerUID">PLAYER UID</label>
+                            <input type="text" id="playerUID" class="form-input" placeholder="Enter your 10-digit Free Fire UID" maxlength="10">
+                            <div class="uid-hint" id="uidHint">Free Fire UID must be exactly 10 digits</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="playerRegion">REGION</label>
+                            <select id="playerRegion" class="form-input">
+                                <option value="asia">Asia</option>
+                                <option value="europe">Europe</option>
+                                <option value="middle_east">Middle East</option>
+                                <option value="america">America</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="configProfile">CONFIG PROFILE</label>
+                            <select id="configProfile" class="form-input">
+                                <option value="stealth">Stealth Mode</option>
+                                <option value="balanced">Balanced</option>
+                                <option value="aggressive">Aggressive</option>
+                                <option value="custom">Custom</option>
+                            </select>
+                        </div>
+                        
+                        <button class="btn btn-activate" id="activateBtn">
+                            ▶️ ACTIVATE TOOLKIT
+                        </button>
+                    </div>
+                    
+                    <div class="player-info">
+                        <div class="info-title">PLAYER INFORMATION</div>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-label">UID Status</div>
+                                <div class="info-value" id="uidStatus">Not Entered</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Toolkit Status</div>
+                                <div class="info-value" id="toolkitStatus">Inactive</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Active Features</div>
+                                <div class="info-value" id="activeFeatures">2</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Last Update</div>
+                                <div class="info-value" id="lastUpdate">Never</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <footer>
+                <p>© 2023 FFMAX Toolkit Pro - Premium Gaming Assistant</p>
+                <p>Advanced features for professional gamers</p>
+            </footer>
+        </div>
+    </div>
+
+    <div class="notification" id="notification">
+        <span id="notificationText">Settings applied successfully!</span>
+    </div>
+
+    <script>
+        // Android-Compatible Voice System
+        let voiceEnabled = true;
+        let speechSynthesisSupported = false;
+        
+        // Check if speech synthesis is supported
+        if ('speechSynthesis' in window) {
+            speechSynthesisSupported = true;
+            console.log('Speech synthesis supported');
+        } else {
+            console.log('Speech synthesis not supported');
+            document.getElementById('voiceToggle').textContent = '🔇 Voice: N/A';
+            document.getElementById('voiceToggle').disabled = true;
+            document.getElementById('testVoice').disabled = true;
+        }
+
+        const voiceToggle = document.getElementById('voiceToggle');
+        const testVoiceBtn = document.getElementById('testVoice');
+
+        // Initialize speech synthesis
+        const speech = new SpeechSynthesisUtterance();
+        speech.volume = 1;
+        speech.rate = 0.9;
+        speech.pitch = 1;
+        speech.lang = 'en-US';
+
+        function speakText(text) {
+            if (!voiceEnabled || !speechSynthesisSupported) return;
+            
+            try {
+                window.speechSynthesis.cancel();
+                speech.text = text;
+                window.speechSynthesis.speak(speech);
+            } catch (error) {
+                console.log('Speech synthesis error:', error);
+                showNotification(text);
+            }
+        }
+
+        // Voice toggle functionality
+        voiceToggle.addEventListener('click', function() {
+            if (!speechSynthesisSupported) return;
+            
+            voiceEnabled = !voiceEnabled;
+            this.textContent = voiceEnabled ? '🔊 Voice: ON' : '🔇 Voice: OFF';
+            this.classList.toggle('active', voiceEnabled);
+            
+            if (voiceEnabled) {
+                speakText('Voice feedback enabled');
+            }
+        });
+
+        // Test voice button
+        testVoiceBtn.addEventListener('click', function() {
+            if (!speechSynthesisSupported) {
+                showNotification('Voice synthesis not supported on this device');
+                return;
+            }
+            speakText('Voice system is working properly. Welcome to FF Max Toolkit Pro');
+        });
+
+        // Add voice feedback to feature cards
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const featureName = this.getAttribute('data-voice');
+                if (featureName) {
+                    speakText(featureName);
+                }
+            });
+        });
+
+        // Enhanced toggle voice feedback
+        document.querySelectorAll('.toggle input').forEach(toggle => {
+            toggle.addEventListener('change', function() {
+                const featureName = this.closest('.feature-card').querySelector('.feature-title').textContent;
+                const status = this.checked ? 'on' : 'off';
+                
+                if (voiceEnabled) {
+                    speakText(`${featureName} ${status}`);
+                }
+                
+                showNotification(`${featureName} ${status.toUpperCase()}`);
+            });
+        });
+
+        // Login System
+        const loginContainer = document.getElementById('loginContainer');
+        const dashboard = document.getElementById('dashboard');
+        const loginForm = document.getElementById('loginForm');
+        const errorMessage = document.getElementById('errorMessage');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const userDisplayName = document.getElementById('userDisplayName');
+        const userAvatar = document.getElementById('userAvatar');
+
+        // Valid credentials
+        const validCredentials = {
+            'admin': 'password123',
+            'user': 'freefire2023',
+            'premium': 'gamingpro',
+            'test': 'test123',
+            'demo': 'demo123'
+        };
+
+        // Login form handler
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value.trim().toLowerCase();
+            const password = document.getElementById('password').value;
+            
+            console.log('Login attempt:', username, password);
+            
+            if (validCredentials[username] && validCredentials[username] === password) {
+                const displayName = username.charAt(0).toUpperCase() + username.slice(1);
+                userDisplayName.textContent = displayName;
+                userAvatar.textContent = displayName.charAt(0).toUpperCase();
+                
+                loginContainer.style.display = 'none';
+                dashboard.style.display = 'block';
+                
+                showNotification(`Welcome back, ${displayName}!`);
+                speakText(`Welcome back ${displayName}! Dashboard unlocked`);
+                
+                localStorage.setItem('ffmax_loggedIn', 'true');
+                localStorage.setItem('ffmax_username', displayName);
+            } else {
+                errorMessage.style.display = 'block';
+                speakText('Invalid credentials. Please try again.');
+                setTimeout(() => {
+                    errorMessage.style.display = 'none';
+                }, 3000);
+            }
+        });
+
+        // Check for existing login session
+        window.addEventListener('load', function() {
+            const loggedIn = localStorage.getItem('ffmax_loggedIn');
+            const username = localStorage.getItem('ffmax_username');
+            
+            if (loggedIn === 'true' && username) {
+                userDisplayName.textContent = username;
+                userAvatar.textContent = username.charAt(0).toUpperCase();
+                loginContainer.style.display = 'none';
+                dashboard.style.display = 'block';
+            }
+        });
+
+        // Logout handler
+        logoutBtn.addEventListener('click', function() {
+            dashboard.style.display = 'none';
+            loginContainer.style.display = 'block';
+            loginForm.reset();
+            
+            localStorage.removeItem('ffmax_loggedIn');
+            localStorage.removeItem('ffmax_username');
+            
+            showNotification('You have been logged out successfully.');
+            speakText('You have been logged out');
+        });
+
+        // Dashboard functionality
+        const playerUID = document.getElementById('playerUID');
+        const uidHint = document.getElementById('uidHint');
+        const activateBtn = document.getElementById('activateBtn');
+        const applySettingsBtn = document.getElementById('applySettings');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const fakeLoader = document.getElementById('fakeLoader');
+        const notification = document.getElementById('notification');
+        const notificationText = document.getElementById('notificationText');
+        
+        // Status elements
+        const uidStatus = document.getElementById('uidStatus');
+        const toolkitStatus = document.getElementById('toolkitStatus');
+        const activeFeatures = document.getElementById('activeFeatures');
+        const lastUpdate = document.getElementById('lastUpdate');
+        
+        // Toggle elements
+        const aimbotToggle = document.getElementById('aimbotToggle');
+        const sniperToggle = document.getElementById('sniperToggle');
+        const espToggle = document.getElementById('espToggle');
+        const triggerToggle = document.getElementById('triggerToggle');
+        const recoilToggle = document.getElementById('recoilToggle');
+        const speedToggle = document.getElementById('speedToggle');
+
+        // Validate UID input
+        function validateUID() {
+            playerUID.value = playerUID.value.replace(/[^0-9]/g, '');
+            if (playerUID.value.length > 10) {
+                playerUID.value = playerUID.value.slice(0, 10);
+            }
+            
+            if (playerUID.value.length === 10) {
+                uidStatus.textContent = 'Valid';
+                uidStatus.style.color = '#2ed573';
+                uidHint.textContent = '✅ Valid 10-digit UID';
+                uidHint.className = 'uid-hint uid-valid';
+                return true;
+            } else if (playerUID.value.length > 0) {
+                uidStatus.textContent = 'Invalid';
+                uidStatus.style.color = '#ff4757';
+                uidHint.textContent = `❌ UID must be 10 digits (${playerUID.value.length}/10)`;
+                uidHint.className = 'uid-hint uid-invalid';
+                return false;
+            } else {
+                uidStatus.textContent = 'Not Entered';
+                uidStatus.style.color = '#ffa502';
+                uidHint.textContent = 'Free Fire UID must be exactly 10 digits';
+                uidHint.className = 'uid-hint';
+                return false;
+            }
+        }
+
+        playerUID.addEventListener('input', validateUID);
+
+        // Activate Toolkit
+        activateBtn.addEventListener('click', function() {
+            if (!validateUID()) {
+                showNotification('Please enter a valid 10-digit Free Fire UID', 'error');
+                speakText('Please enter a valid 10 digit UID');
+                return;
+            }
+            
+            const btn = this;
+            btn.innerHTML = '⏳ ACTIVATING...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                toolkitStatus.textContent = 'Active';
+                toolkitStatus.style.color = '#2ed573';
+                lastUpdate.textContent = new Date().toLocaleTimeString();
+                updateActiveFeatures();
+                
+                showNotification(`✅ Toolkit activated for UID: ${playerUID.value}`);
+                speakText(`Toolkit activated for UID ${playerUID.value}`);
+                
+                setTimeout(() => {
+                    btn.innerHTML = '▶️ ACTIVATE TOOLKIT';
+                    btn.disabled = false;
+                }, 2000);
+            }, 1500);
+        });
+
+        // Apply Settings
+        applySettingsBtn.addEventListener('click', function() {
+            const btn = this;
+            btn.innerHTML = '⏳ APPLYING...';
+            btn.disabled = true;
+            fakeLoader.style.display = 'block';
+            
+            setTimeout(() => {
+                updateActiveFeatures();
+                lastUpdate.textContent = new Date().toLocaleTimeString();
+                showNotification('✅ All settings applied successfully!');
+                speakText('All settings applied successfully');
+                
+                setTimeout(() => {
+                    btn.innerHTML = '⚙️ APPLY ALL SETTINGS';
+                    btn.disabled = false;
+                    fakeLoader.style.display = 'none';
+                }, 1500);
+            }, 2000);
+        });
+
+        // Download Button
+        downloadBtn.addEventListener('click', function() {
+            const btn = this;
+            btn.innerHTML = '⏳ DOWNLOADING...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                showNotification('🚀 Premium version downloaded successfully!');
+                speakText('Premium version downloaded successfully');
+                
+                setTimeout(() => {
+                    btn.innerHTML = '🚀 DOWNLOAD PANEL PRO';
+                    btn.disabled = false;
+                }, 2000);
+            }, 2000);
+        });
+
+        // Update active features count
+        function updateActiveFeatures() {
+            let count = 0;
+            if (aimbotToggle.checked) count++;
+            if (sniperToggle.checked) count++;
+            if (espToggle.checked) count++;
+            if (triggerToggle.checked) count++;
+            if (recoilToggle.checked) count++;
+            if (speedToggle.checked) count++;
+            
+            activeFeatures.textContent = count;
+        }
+
+        // Show notification
+        function showNotification(message, type = 'success') {
+            notificationText.textContent = message;
+            
+            if (type === 'error') {
+                notification.style.borderLeftColor = '#ff4757';
+                notification.classList.add('error');
+            } else {
+                notification.style.borderLeftColor = '#2ed573';
+                notification.classList.remove('error');
+            }
+            
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Initialize toggles with change listeners
+        const toggles = [aimbotToggle, sniperToggle, espToggle, triggerToggle, recoilToggle, speedToggle];
+        toggles.forEach(toggle => {
+            toggle.addEventListener('change', updateActiveFeatures);
+        });
+
+        // Initialize
+        validateUID();
+        updateActiveFeatures();
+
+        // Add some random UID for demo
+        setTimeout(() => {
+            playerUID.value = '2849375102';
+            validateUID();
+        }, 1000);
+
+        // Welcome message on load
+        setTimeout(() => {
+            if (voiceEnabled && speechSynthesisSupported) {
+                speakText('Welcome to FF Max Toolkit Pro. Please login to continue');
+            }
+        }, 1000);
+
+        // Android touch improvements
+        document.addEventListener('touchstart', function() {}, {passive: true});
+    </script>
+</body>
+</html>
